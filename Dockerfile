@@ -1,5 +1,5 @@
-FROM python:2.7-alpine
-LABEL maintainer bitrox <proxy@bitrox.io>
+FROM python:3.9-alpine
+LABEL maintainer guff666 <garethhowell@gmail.com>
 
 # Set environment variables.
 ENV TERM=xterm-color
@@ -15,9 +15,9 @@ RUN \
 		bash \
 		coreutils \
 		nano \
-        	py-crypto \
+		py3-cryptography \
 		ca-certificates \
-        	certbot \
+       	certbot \
 		mosquitto \
 		mosquitto-clients && \
 	rm -f /var/cache/apk/* && \

@@ -1,6 +1,8 @@
-# alpine-mosquitto-certbot
+# py3-alpine-mosquitto-certbot
 
 An automated build that integrates the [Mosquitto MQTT server](https://mosquitto.org/) with [Certbot](https://certbot.eff.org/) on top of [Alpine linux](https://www.alpinelinux.org/).
+
+Updated from [bitrox's](https://hub.docker.com/r/bitrox/alpine-mosquitto-certbot) original to use python 3.9 and drop invalid certbot options.
 
 As the Internet of Things (IoT) world rapidly grows and evolves, developers need a simple and secure way to implement peer-to-peer and peer-to-server (backend) communications.  MQTT is a relatively simple message/queue-based protocol that provides exactly that. 
 Unfortunately, there are a ton of Docker images available for brokers, e.g. eclipse-mosquitto; but, nearly all of them leave it up to the user to figure out how to secure the platform.  This results in many developers simply ignoring security altogether for the sake of simplicity.  Even more dangerous, many semi-technical home owners are now dabbling in the home automation space and due to the complexity of securing system, they are hanging IoT/automation devices on the internet completely unsecurred.
@@ -17,7 +19,7 @@ A straigtforward way of standing up a server is to use [docker-compose](https://
 version: '2'
 services:
   mqtt:
-    image: bitrox/alpine-mosquitto-certbot
+    image: guff666/py3-alpine-mosquitto-certbot
     networks:
       - backend-net
     ports:
@@ -83,7 +85,7 @@ The sample docker-compose.yml file shows a local directory ./scripts mapped to t
 
 ## Certbot/LetsEncrypt Integration
 
-At container startup, scripts will look to see if certificates for DOMAIN exist in /letsencrypt.  If it doesn't find any certificates, it will attempt to obtain them (via certbot certonly --standalone --agree-tos --standalone-supported-challenges http-01 -n -d $DOMAIN -m $EMAIL).
+At container startup, scripts will look to see if certificates for DOMAIN exist in /letsencrypt.  If it doesn't find any certificates, it will attempt to obtain them (via certbot certonly --standalone --agree-tos -n -d $DOMAIN -m $EMAIL).
 If certificates do exist, then an attempt will be made to renew them (via certbot renew).
 Once a week, scripts will be run to check to see if the certificates need renewal.  If so, they will be renewed, then the mosquitto server will be restarted so that it picks up the new certificates.  Unfortunately, this does mean that there will be a brief (few second) outage each time certificates are in fact renewed.  Adjust use cases for this server accordingly.
 
